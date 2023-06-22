@@ -171,5 +171,14 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 			array(),
 			$version
 		);
+
+		wp_add_inline_script(
+			'produCustomTaxonomyField_general',
+			'const PRODU_DATA = ' .
+				wp_json_encode(
+					array( 'tax_endpoint' => get_rest_url( null, '/produ/v1/taxonomy/' ) )
+				),
+			'before'
+		);
 	}
 }

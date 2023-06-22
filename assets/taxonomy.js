@@ -24,7 +24,7 @@ acf.addAction('new_field/type=produCustomTaxonomyField', function( field ){
         {
           'core' : {
             'data' : {
-              "url" : "http://localhost/jsTree/demo/basic/root.json",
+              "url" : PRODU_DATA.tax_endpoint + e.params.data.id,
               "dataType" : "json",
             }
           },

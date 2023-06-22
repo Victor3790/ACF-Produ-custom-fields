@@ -41,6 +41,7 @@ class Fields {
 	 */
 	private function __construct() {
 		add_action( 'init', array( $this, 'include_custom_field_types' ) );
+		add_action( 'rest_api_init', array( $this, 'add_endpoints' ) );
 		add_filter( 'acf/fields/taxonomy/query', array( $this, 'customize_args_post_query' ), 10, 3 );
 	}
 
@@ -84,6 +85,34 @@ class Fields {
 
 		$args['parent'] = 0;
 		return $args;
+	}
+
+	/**
+	 * Add custom endpoints to dispatch
+	 * ajax queries.
+	 */
+	public function add_endpoints() {
+		register_rest_route(
+			'produ/v1',
+			'/taxonomy/(?P<id>\d+)',
+			array(
+				'methods'  => 'GET',
+				'callback' => array( $this, 'get_taxonomies' ),
+			),
+		);
+	}
+
+	/**
+	 * Returns the sub taxonomies of the
+	 * parent taxnomoy identified by id.
+	 *
+	 * @param WP_REST_Request $request The rest rout request.
+	 */
+	public function get_taxonomies( $request ) {
+		$id = $request->get_param( 'id' );
+		$id = filter_var( $id, FILTER_VALIDATE_INT );
+
+		echo '[{"id":1,"text":"Root node","children":[{"id":2,"text":"Child node 1"},{"id":3,"text":"Child node 2"}]}]';
 	}
 }
 
