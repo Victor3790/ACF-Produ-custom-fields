@@ -23,14 +23,5 @@ jQuery(function ($) {
       {
           'plugins': ['checkbox']
       }
-  ); 
-  /*$.jstree.defaults.core.themes.icons = false;
-  var to = false;
-  $('#plugins4_q').keyup(function () {
-      if(to) { clearTimeout(to); }
-      to = setTimeout(function () {
-      var v = $('#plugins4_q').val();
-      $('.jstree_demo_div').jstree(true).search(v);
-      }, 250);
-  });*/
+  );
 });
