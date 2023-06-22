@@ -18,31 +18,23 @@ acf.addAction('new_field/type=produCustomTaxonomyField', function( field ){
     let select = field.$el.find('select');
     acf.select2.init( select, props, field );
 
-    select.on('change.select2', function (e){
-      let options = jQuery(this).select2('data');
-      let html = '';
+    select.on('select2:select', function(e){
+      jQuery('#produ-sub-sections').append('<div data-taxonomy-id="' + e.params.data.id + '" class="jstree_produ_div"></div>');
+      jQuery('[data-taxonomy-id=' + e.params.data.id + ']').jstree(
+        {
+          'core' : {
+            'data' : {
+              "url" : "http://localhost/jsTree/demo/basic/root.json",
+              "dataType" : "json",
+            }
+          },
+          'plugins': ['checkbox']
+        }
+      );
+    });
 
-      jQuery.each(options, function( index, value ){
-        html += '<div data-taxonomy-id="' + value['id'] + '" class="jstree_produ_div"></div>';
-      });
-
-      jQuery('#produ-sub-sections').html(html);
-
-      let sections = jQuery('.jstree_produ_div');
-
-      jQuery.each(sections, function( index, div ){
-        jQuery(div).jstree(
-          {
-            'core' : {
-              'data' : {
-                "url" : "http://localhost/jsTree/demo/basic/root.json" /*+ jQuery(div).data('taxonomy-id')*/,
-                "dataType" : "json",
-              }
-            },
-            'plugins': ['checkbox']
-          }
-        );
-      });
+    select.on('select2:unselect', function(e){
+      jQuery('[data-taxonomy-id=' + e.params.data.id + ']').remove();
     });
 });
 
