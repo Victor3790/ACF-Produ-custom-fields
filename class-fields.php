@@ -113,6 +113,7 @@ class Fields {
 		$id = $request->get_param( 'id' );
 		$id = filter_var( $id, FILTER_VALIDATE_INT );
 
+		// TODO: These queries should be able to get other taxonomies.
 		$parent_category = get_categories(
 			array(
 				'include'    => $id,

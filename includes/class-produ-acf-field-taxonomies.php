@@ -110,31 +110,122 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 	 */
 	public function render_field( $field ) {
 
-			$field['type']     = 'select';
-			$field['multiple'] = 1;
-			$field['ui']       = 1;
-			$field['ajax']     = 1;
-			$field['choices']  = array();
+		$field['type']     = 'select';
+		$field['multiple'] = 1;
+		$field['ui']       = 1;
+		$field['ajax']     = 1;
+		$field['choices']  = array();
 
-			$div = array(
-				'class'           => 'acf-taxonomy-field',
-				'data-save'       => 1,
-				'data-ftype'      => 'multi-select',
-				'data-taxonomy'   => 'category',
-				'data-allow_null' => 0,
+		// Value.
+		if ( ! empty( $field['value'] ) ) {
+
+			// Get terms.
+			$terms = $this->get_terms( $field['value'], $field['taxonomy'] );
+
+			// Set choices.
+			if ( ! empty( $terms ) ) {
+
+				foreach ( array_keys( $terms ) as $i ) {
+
+					// Vars.
+					$term = acf_extract_var( $terms, $i );
+
+					// Append to choices.
+					$field['choices'][ $term->term_id ] = $this->get_term_title( $term, $field );
+
+				}
+			}
+		}
+
+		$div = array(
+			'class'           => 'acf-taxonomy-field',
+			'data-save'       => 1,
+			'data-ftype'      => 'multi-select',
+			'data-taxonomy'   => 'category',
+			'data-allow_null' => 0,
+		);
+
+		$params = array(
+			'attributes' => acf_esc_attrs( $div ),
+			'field'      => $field,
+		);
+
+		$file     = Produ\ACF\PATH . 'templates/taxonomy-field.php';
+		$template = new Template();
+		$html     = $template->load( $file, $params );
+
+		//phpcs:ignore
+		echo $html;
+	}
+
+	/**
+	 *  This function will return an array of terms for a given field value
+	 *
+	 *  @type    function
+	 *  @date    13/06/2014
+	 *  @since   5.0.0
+	 *
+	 *  @param array  $value The set of taxonomy ids.
+	 *  @param string $taxonomy The taxonomy to query.
+	 */
+	private function get_terms( $value, $taxonomy = 'category' ) {
+
+		// Load terms in 1 query to save multiple DB calls from following code.
+		if ( count( $value ) > 1 ) {
+
+			$terms = acf_get_terms(
+				array(
+					'taxonomy'   => $taxonomy,
+					'include'    => $value,
+					'hide_empty' => false,
+				)
 			);
 
-			$params = array(
-				'attributes' => acf_esc_attrs( $div ),
-				'field'      => $field,
-			);
+		}
 
-			$file     = Produ\ACF\PATH . 'templates/taxonomy-field.php';
-			$template = new Template();
-			$html     = $template->load( $file, $params );
+		// Update value to include $post.
+		foreach ( array_keys( $value ) as $i ) {
 
-			//phpcs:ignore
-			echo $html;
+			$value[ $i ] = get_term( $value[ $i ], $taxonomy );
+
+		}
+
+		// Filter out null values.
+		$value = array_filter( $value );
+
+		return $value;
+	}
+
+	/**
+	 * Returns the Term's title displayed in the field UI.
+	 *
+	 * @date    1/11/2013
+	 * @since   5.0.0
+	 *
+	 * @param   WP_Term $term The term object.
+	 * @param   array   $field The field settings.
+	 * @param   mixed   $post_id The post_id being edited.
+	 * @return  string
+	 */
+	private function get_term_title( $term, $field, $post_id = 0 ) {
+		$title = acf_get_term_title( $term );
+
+		// Default $post_id to current post being edited.
+		$post_id = $post_id ? $post_id : acf_get_form_data( 'post_id' );
+
+		/**
+		 * Filters the term title.
+		 *
+		 * @date    1/11/2013
+		 * @since   5.0.0
+		 *
+		 * @param   string $title The term title.
+		 * @param   WP_Term $term The term object.
+		 * @param   array $field The field settings.
+		 * @param   (int|string) $post_id The post_id being edited.
+		 */
+		//phpcs:ignore
+		return apply_filters( 'acf/fields/taxonomy/result', $title, $term, $field, $post_id );
 	}
 
 
