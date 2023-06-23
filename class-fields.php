@@ -104,7 +104,8 @@ class Fields {
 
 	/**
 	 * Returns the sub taxonomies of the
-	 * parent taxnomoy identified by id.
+	 * parent taxnomoy identified by id
+	 * as a json string.
 	 *
 	 * @param WP_REST_Request $request The rest rout request.
 	 */
