@@ -112,7 +112,43 @@ class Fields {
 		$id = $request->get_param( 'id' );
 		$id = filter_var( $id, FILTER_VALIDATE_INT );
 
-		echo '[{"id":1,"text":"Root node","children":[{"id":2,"text":"Child node 1"},{"id":3,"text":"Child node 2"}]}]';
+		$parent_category = get_categories(
+			array(
+				'include'    => $id,
+				'fields'     => 'id=>name',
+				'hide_empty' => false,
+			)
+		);
+
+		$child_categories = get_categories(
+			array(
+				'parent'     => $id,
+				'fields'     => 'id=>name',
+				'hide_empty' => false,
+			)
+		);
+
+		$result = array(
+			'id'       => key( $parent_category ),
+			'text'     => current( $parent_category ),
+			'children' => array(),
+		);
+
+		foreach ( $child_categories as $id => $name ) {
+
+			$child = array(
+				'id'   => $id,
+				'text' => $name,
+			);
+
+			array_push( $result['children'], $child );
+
+		}
+
+		$json_result = wp_json_encode( $result );
+
+		//phpcs:ignore
+		echo $json_result;
 	}
 }
 
