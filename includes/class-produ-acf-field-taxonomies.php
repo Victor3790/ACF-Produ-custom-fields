@@ -116,6 +116,20 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 		$field['ajax']     = 1;
 		$field['choices']  = array();
 
+		$div = array(
+			'class'           => 'acf-taxonomy-field',
+			'data-save'       => 1,
+			'data-ftype'      => 'multi-select',
+			'data-taxonomy'   => 'category',
+			'data-allow_null' => 0,
+		);
+
+		$params = array(
+			'attributes'     => acf_esc_attrs( $div ),
+			'field'          => $field,
+			'sub_categories' => '',
+		);
+
 		// Value.
 		if ( ! empty( $field['value'] ) ) {
 
@@ -134,21 +148,13 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 					$field['choices'][ $term->term_id ] = $this->get_term_title( $term, $field );
 
 				}
+
+				//phpcs:ignore
+				$params['sub_categories'] = get_post_meta( $_GET['post'], 'produ-sub-categories', true );
+
+				$params['field'] = $field;
 			}
 		}
-
-		$div = array(
-			'class'           => 'acf-taxonomy-field',
-			'data-save'       => 1,
-			'data-ftype'      => 'multi-select',
-			'data-taxonomy'   => 'category',
-			'data-allow_null' => 0,
-		);
-
-		$params = array(
-			'attributes' => acf_esc_attrs( $div ),
-			'field'      => $field,
-		);
 
 		$file     = Produ\ACF\PATH . 'templates/taxonomy-field.php';
 		$template = new Template();

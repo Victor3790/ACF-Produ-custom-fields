@@ -43,6 +43,14 @@ class Fields {
 		add_action( 'init', array( $this, 'include_custom_field_types' ) );
 		add_action( 'rest_api_init', array( $this, 'add_endpoints' ) );
 		add_filter( 'acf/fields/taxonomy/query', array( $this, 'customize_args_post_query' ), 10, 3 );
+		add_action(
+			'acf/save_post',
+			function( $post_id ) {
+				//phpcs:ignore
+				$sub_categories = $_POST['produ-sub-categories'];
+				update_post_meta( $post_id, 'produ-sub-categories', $sub_categories );
+			}
+		);
 	}
 
 	/**
