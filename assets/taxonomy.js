@@ -33,12 +33,14 @@ jQuery(function ($) {
         PRODU_DATA.subCategories['cat_' + parentId];
       }
 
-      PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
+      // If a parent node was selected, add all of its children.
+      if ( data.node.children.length > 0 ) {
+        PRODU_DATA.subCategories['cat_' + parentId] = data.node.children;
+      } else {
+        PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
+      }
 
       $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
-
-      // TODO: Define what to do when all items are selected.
-      console.log((data.node.children.length > 0));
     })
     .on('deselect_node.jstree', function(e, data){
       let parentId = $(e.target).data('taxonomy-id');
