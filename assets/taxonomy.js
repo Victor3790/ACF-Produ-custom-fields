@@ -36,7 +36,7 @@ jQuery(function ($) {
       $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
 
       // TODO: Define what to do when all items are selected.
-      //console.log((data.node.children.length > 0));
+      console.log((data.node.children.length > 0));
     })
     .on('deselect_node.jstree', function(e, data){
       let parentId = $(e.target).data('taxonomy-id');
@@ -44,10 +44,11 @@ jQuery(function ($) {
       PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
       
       $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
-      console.log($('input[name=produ-sub-categories]').val());
     })
     .on('ready.jstree', function(e, data){
-      $('[data-taxonomy-id=' + taxId + ']').jstree().select_node(PRODU_DATA.subCategories['cat_' + taxId], false, false);
+      if ( typeof PRODU_DATA.subCategories !== 'undefined' ) {
+        $('[data-taxonomy-id=' + taxId + ']').jstree().select_node(PRODU_DATA.subCategories['cat_' + taxId], false, false);
+      }
     })
     .jstree(
       {
