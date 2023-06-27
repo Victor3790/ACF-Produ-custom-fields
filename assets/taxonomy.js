@@ -12,7 +12,9 @@ jQuery(function ($) {
 
     jstreeProduInit(taxId);
 
-    // TODO: Check uninitialized PRODU_DATA.subCategories.
+    if ( typeof PRODU_DATA.subCategories === 'undefined' ) {
+      PRODU_DATA.subCategories = {};
+    }
     PRODU_DATA.subCategories['cat_' + e.params.data.id] = [];
     $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
   });
