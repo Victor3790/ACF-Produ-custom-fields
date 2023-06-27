@@ -11,4 +11,5 @@
 </div>
 <div id="produ-sub-sections" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
 	<input type="hidden" name="produ-sub-categories" value='<?php echo esc_attr( $sub_categories ); ?>'>
+	<?php wp_nonce_field( 'handle-sub-taxonomies-' . $post_id, 'produ-sub-categories-nonce' ); ?>
 </div>

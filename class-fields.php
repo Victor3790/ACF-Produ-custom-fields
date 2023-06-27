@@ -163,8 +163,16 @@ class Fields {
 	 * @param int|string $post_id The ID of the post being edited.
 	 */
 	public function handle_subtaxonomies( $post_id ) {
-		//phpcs:ignore
-		$sub_categories = $_POST['produ-sub-categories'];
+
+		if ( ! isset( $_POST['produ-sub-categories'] ) || ! isset( $_POST['produ-sub-categories-nonce'] ) ) {
+			return;
+		}
+
+		$nonce = sanitize_text_field( wp_unslash( $_POST['produ-sub-categories-nonce'] ) );
+
+		wp_verify_nonce( $nonce, 'handle-sub-taxonomies-' . $post_id );
+
+		$sub_categories = sanitize_text_field( wp_unslash( $_POST['produ-sub-categories'] ) );
 		update_post_meta( $post_id, 'produ-sub-categories', $sub_categories );
 
 		$array_sub_categories = json_decode( stripslashes( $sub_categories ), true );

@@ -110,6 +110,8 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 	 */
 	public function render_field( $field ) {
 
+		global $post;
+
 		$field['type']     = 'select';
 		$field['multiple'] = 1;
 		$field['ui']       = 1;
@@ -127,6 +129,7 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 		$params = array(
 			'attributes'     => acf_esc_attrs( $div ),
 			'field'          => $field,
+			'post_id'        => $post->ID,
 			'sub_categories' => '',
 		);
 
@@ -149,7 +152,6 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 
 				}
 
-				global $post;
 				$params['sub_categories'] = get_post_meta( $post->ID, 'produ-sub-categories', true );
 
 				$params['field'] = $field;
