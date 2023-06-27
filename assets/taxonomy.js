@@ -1,6 +1,5 @@
 jQuery(function ($) {
   // TODO: What if it is a new post.
-  // TODO: Refactor the code to initialize taxonomy trees into a function.
   //Initialize previously saved categories (If any).
   $.each(PRODU_DATA.subCategories, function( i, value ){
     let taxId = i.split('_')[1];
