@@ -45,7 +45,12 @@ jQuery(function ($) {
     .on('deselect_node.jstree', function(e, data){
       let parentId = $(e.target).data('taxonomy-id');
 
-      PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
+      // If a parent noe was deselected, delete all the node.
+      if ( data.node.children.length > 0 ) {
+        PRODU_DATA.subCategories['cat_' + parentId] = [];
+      } else {
+        PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
+      }
       
       $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
     })
