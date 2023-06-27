@@ -149,8 +149,8 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 
 				}
 
-				//phpcs:ignore
-				$params['sub_categories'] = get_post_meta( $_GET['post'], 'produ-sub-categories', true );
+				global $post;
+				$params['sub_categories'] = get_post_meta( $post->ID, 'produ-sub-categories', true );
 
 				$params['field'] = $field;
 			}
