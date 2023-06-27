@@ -8,6 +8,7 @@
  * @package WordPress
  */
 
+// TODO: Check ignore comments.
 namespace Produ\ACF;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -43,14 +44,7 @@ class Fields {
 		add_action( 'init', array( $this, 'include_custom_field_types' ) );
 		add_action( 'rest_api_init', array( $this, 'add_endpoints' ) );
 		add_filter( 'acf/fields/taxonomy/query', array( $this, 'customize_args_post_query' ), 10, 3 );
-		add_action(
-			'acf/save_post',
-			function( $post_id ) {
-				//phpcs:ignore
-				$sub_categories = $_POST['produ-sub-categories'];
-				update_post_meta( $post_id, 'produ-sub-categories', $sub_categories );
-			}
-		);
+		add_action( 'acf/save_post', array( $this, 'handle_subtaxonomies' ) );
 	}
 
 	/**
@@ -100,6 +94,8 @@ class Fields {
 	 * ajax queries.
 	 */
 	public function add_endpoints() {
+		// TODO: Add sanitize and permission callbacks.
+		// See: https://github.com/Victor3790/portefy/blob/master/public/classes/class_portefy_endpoints.php.
 		register_rest_route(
 			'produ/v1',
 			'/taxonomy/(?P<id>\d+)',
@@ -157,8 +153,20 @@ class Fields {
 
 		$json_result = wp_json_encode( $result );
 
+		rest_send_cors_headers( '200' );
+		echo wp_kses( $json_result, 'post' );
+	}
+
+	/**
+	 * Handle sub taxonomies.
+	 *
+	 * @param int|string $post_id The ID of the post being edited.
+	 */
+	public function handle_subtaxonomies( $post_id ) {
+		// TODO: Handle categories.
 		//phpcs:ignore
-		echo $json_result;
+		$sub_categories = $_POST['produ-sub-categories'];
+		update_post_meta( $post_id, 'produ-sub-categories', $sub_categories );
 	}
 }
 
