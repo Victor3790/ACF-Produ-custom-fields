@@ -160,6 +160,7 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 		$template = new Template();
 		$html     = $template->load( $file, $params );
 
+		// Code escaped in template.
 		//phpcs:ignore
 		echo $html;
 	}
@@ -230,6 +231,7 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 		 * @param   array $field The field settings.
 		 * @param   (int|string) $post_id The post_id being edited.
 		 */
+		// The hook name is set in acf.
 		//phpcs:ignore
 		return apply_filters( 'acf/fields/taxonomy/result', $title, $term, $field, $post_id );
 	}
