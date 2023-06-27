@@ -163,10 +163,25 @@ class Fields {
 	 * @param int|string $post_id The ID of the post being edited.
 	 */
 	public function handle_subtaxonomies( $post_id ) {
-		// TODO: Handle categories.
 		//phpcs:ignore
 		$sub_categories = $_POST['produ-sub-categories'];
 		update_post_meta( $post_id, 'produ-sub-categories', $sub_categories );
+
+		$array_sub_categories = json_decode( stripslashes( $sub_categories ), true );
+
+		$valid_categories = array();
+
+		foreach ( $array_sub_categories as $key => $subtaxonomies ) {
+			$array_key = explode( '_', $key );
+
+			$valid_categories[] = (int) $array_key[1];
+
+			foreach ( $subtaxonomies as $subtaxonomy ) {
+				$valid_categories[] = (int) $subtaxonomy;
+			}
+		}
+
+		wp_set_post_categories( $post_id, $valid_categories );
 	}
 }
 
