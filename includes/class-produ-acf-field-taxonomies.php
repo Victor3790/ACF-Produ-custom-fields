@@ -263,6 +263,13 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 		);
 
 		wp_enqueue_style(
+			'produCustomTaxonomyField_style',
+			Produ\ACF\URL . 'assets/taxonomy-styles.css',
+			array(),
+			$version
+		);
+
+		wp_enqueue_style(
 			'produCustomTaxonomyField_jsTree_style',
 			Produ\ACF\URL . 'assets/jsTree/themes/default/style.min.css',
 			array(),

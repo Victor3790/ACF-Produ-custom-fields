@@ -1,0 +1,8 @@
+.jstree_produ_div{
+    margin-top: 30px;
+}
+
+[aria-level="1"]{
+    font-weight: bolder;
+    font-size: 14px;
+}

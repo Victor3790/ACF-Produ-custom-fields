@@ -44,7 +44,7 @@ jQuery(function ($) {
             "dataType" : "json",
           }
         },
-        'plugins': ['checkbox']
+        'plugins': ['checkbox', 'wholerow']
       }
     );
     
