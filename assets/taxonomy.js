@@ -5,11 +5,15 @@ jQuery(function ($) {
 
     jstreeProduInit(taxId);
   });
+
   //What to do when a main category is selected.
   PRODU_DATA.select.on('select2:select', function(e){
     let taxId = e.params.data.id;
 
     jstreeProduInit(taxId);
+
+    PRODU_DATA.subCategories['cat_' + e.params.data.id] = [];
+    $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
   });
 
   //What to do when a main category is unselected.
