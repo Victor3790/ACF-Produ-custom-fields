@@ -15,6 +15,8 @@ jQuery(function ($) {
   //What to do when a main category is unselected.
   PRODU_DATA.select.on('select2:unselect', function(e){
     $('[data-taxonomy-id=' + e.params.data.id + ']').remove();
+    delete PRODU_DATA.subCategories['cat_' + e.params.data.id];
+    $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
   });
 
   function jstreeProduInit(taxId) {
