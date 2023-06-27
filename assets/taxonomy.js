@@ -1,5 +1,4 @@
 jQuery(function ($) {
-  // TODO: What if it is a new post.
   //Initialize previously saved categories (If any).
   $.each(PRODU_DATA.subCategories, function( i, value ){
     let taxId = i.split('_')[1];
@@ -88,5 +87,10 @@ acf.addAction('new_field/type=produCustomTaxonomyField', function( field ){
     const PRODU_DATA = {};
   }
   PRODU_DATA.select = select;
-  PRODU_DATA.subCategories = JSON.parse(jQuery('input[name=produ-sub-categories]').val());
+  
+  let subCategories = jQuery('input[name=produ-sub-categories]').val();
+
+  if( subCategories !== '' ) {
+    PRODU_DATA.subCategories = JSON.parse(subCategories);
+  }
 });
