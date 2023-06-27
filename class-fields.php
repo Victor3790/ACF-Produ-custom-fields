@@ -8,7 +8,6 @@
  * @package WordPress
  */
 
-// TODO: Check ignore comments.
 namespace Produ\ACF;
 
 if ( ! defined( 'ABSPATH' ) ) {
