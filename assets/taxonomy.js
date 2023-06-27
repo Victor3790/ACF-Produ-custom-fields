@@ -5,6 +5,21 @@ jQuery(function ($) {
   $.each(PRODU_DATA.subCategories, function( i, value ){
     let taxId = i.split('_')[1];
 
+    jstreeProduInit(taxId);
+  });
+  //What to do when a main category is selected.
+  PRODU_DATA.select.on('select2:select', function(e){
+    let taxId = e.params.data.id;
+
+    jstreeProduInit(taxId);
+  });
+
+  //What to do when a main category is unselected.
+  PRODU_DATA.select.on('select2:unselect', function(e){
+    $('[data-taxonomy-id=' + e.params.data.id + ']').remove();
+  });
+
+  function jstreeProduInit(taxId) {
     $('#produ-sub-sections').append('<div data-taxonomy-id="' + taxId + '" class="jstree_produ_div"></div>');
     $('[data-taxonomy-id=' + taxId + ']')
     .on('select_node.jstree', function(e, data){
@@ -47,55 +62,7 @@ jQuery(function ($) {
         'plugins': ['checkbox', 'wholerow']
       }
     );
-    
-  });
-  //What to do when a main category is selected.
-  PRODU_DATA.select.on('select2:select', function(e){
-    $('#produ-sub-sections').append('<div data-taxonomy-id="' + e.params.data.id + '" class="jstree_produ_div"></div>');
-    $('[data-taxonomy-id=' + e.params.data.id + ']')
-    .on('select_node.jstree', function(e, data){
-      let parentId = $(e.target).data('taxonomy-id');
-
-      if ( typeof PRODU_DATA.subCategories === 'undefined' ) {
-        PRODU_DATA.subCategories = {};
-      }
-
-      if ( typeof PRODU_DATA.subCategories['cat_' + parentId] === 'undefined' ) {
-        PRODU_DATA.subCategories['cat_' + parentId];
-      }
-
-      PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
-
-      $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
-
-      // TODO: Define what to do when all items are selected.
-      //console.log((data.node.children.length > 0));
-    })
-    .on('deselect_node.jstree', function(e, data){
-      let parentId = $(e.target).data('taxonomy-id');
-
-      PRODU_DATA.subCategories['cat_' + parentId] = data.selected;
-      
-      $('input[name=produ-sub-categories]').val(JSON.stringify(PRODU_DATA.subCategories));
-      console.log($('input[name=produ-sub-categories]').val());
-    })
-    .jstree(
-      {
-        'core' : {
-          'data' : {
-            "url" : PRODU_DATA.tax_endpoint + e.params.data.id,
-            "dataType" : "json",
-          }
-        },
-        'plugins': ['checkbox']
-      }
-    );
-  });
-
-  //What to do when a main category is unselected.
-  PRODU_DATA.select.on('select2:unselect', function(e){
-    $('[data-taxonomy-id=' + e.params.data.id + ']').remove();
-  });
+  }
 });
 
 //Initialize the main section selector.
