@@ -1,4 +1,8 @@
 jQuery(function ($) {
+    if ( typeof PRODU_DATA.select === 'undefined' ) {
+      return;
+    }
+
   //Initialize previously saved categories (If any).
   $.each(PRODU_DATA.subCategories, function( i, value ){
     let taxId = i.split('_')[1];
