@@ -118,6 +118,12 @@ class Produ_ACF_Field_Taxonomies extends \acf_field {
 		$field['ajax']     = 1;
 		$field['choices']  = array();
 
+		if ( 1 === $field['required'] ) {
+			$field['allow_null'] = 1;
+		} else {
+			$field['allow_null'] = 0;
+		}
+
 		$div = array(
 			'class'           => 'acf-taxonomy-field',
 			'data-save'       => 1,
